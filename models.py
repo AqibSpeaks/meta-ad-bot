@@ -1,36 +1,22 @@
-# app/models.py
-from sqlalchemy import Column, Integer, String, Text, DateTime, Float
-from sqlalchemy.orm import declarative_base
-from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime
 
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+    email = Column(String(100))
+    created_at = Column(DateTime)
 
-class Ad(Base):
-    __tablename__ = "ads"
+class AdCampaign(Base):
+    __tablename__ = 'ad_campaigns'
+    
+    id = Column(Integer, primary_key=True)
+    campaign_name = Column(String(200))
+    budget = Column(Integer)
+    status = Column(String(50))
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-
-    # Meta Ad Library fields
-    ad_id = Column(String, unique=True, index=True)  # Unique ID from Meta
-    country = Column(String, index=True)
-    category = Column(String, index=True)
-    ad_copy = Column(Text)
-    creative_url = Column(String)  # Thumbnail/video URL
-    landing_page = Column(String)
-
-    # Performance metrics
-    spending = Column(Float, nullable=True)
-    comments = Column(Integer, default=0)
-    likes = Column(Integer, default=0)
-    shares = Column(Integer, default=0)
-
-    # Duration
-    start_date = Column(DateTime, default=datetime.utcnow)
-    end_date = Column(DateTime, nullable=True)
-
-    # Extra tracking
-    last_seen = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<Ad(ad_id={self.ad_id}, country={self.country}, category={self.category})>"
+# You can add more models here
