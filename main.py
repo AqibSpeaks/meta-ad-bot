@@ -1,57 +1,68 @@
 import streamlit as st
-import sys
-import os
+import pandas as pd
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime
 
-# Fix the import issue - add this at the top
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.append(current_dir)
+# Define Base directly in main.py
+Base = declarative_base()
 
-try:
-    from app.models import Base, User, AdCampaign
-    st.success("✅ Models imported successfully!")
-except ImportError as e:
-    st.error(f"❌ Import error: {e}")
-    st.info("Checking project structure...")
+class User(Base):
+    __tablename__ = 'users'
     
-    # Show current directory structure
-    st.write("Current directory:", os.getcwd())
-    if os.path.exists('app'):
-        st.write("✅ app folder exists")
-        if os.path.exists('app/__init__.py'):
-            st.write("✅ app/__init__.py exists")
-        else:
-            st.write("❌ app/__init__.py missing")
-        if os.path.exists('app/models.py'):
-            st.write("✅ app/models.py exists")
-        else:
-            st.write("❌ app/models.py missing")
-    else:
-        st.write("❌ app folder doesn't exist")
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+    email = Column(String(100))
+    created_at = Column(DateTime)
+
+class AdCampaign(Base):
+    __tablename__ = 'ad_campaigns'
+    
+    id = Column(Integer, primary_key=True)
+    campaign_name = Column(String(200))
+    budget = Column(Integer)
+    status = Column(String(50))
 
 # Your Streamlit app code
 st.title("Meta Ad Bot Dashboard 🚀")
+st.success("✅ Models defined successfully!")
+
 st.write("Welcome to your advertising dashboard!")
 
 # Display sample data
 st.subheader("Sample User Data")
-st.write("""
-- User ID: 1, Name: John Doe, Email: john@example.com
-- User ID: 2, Name: Jane Smith, Email: jane@example.com
-""")
+sample_users = [
+    {"ID": 1, "Name": "John Doe", "Email": "john@example.com", "Created": "2024-01-15"},
+    {"ID": 2, "Name": "Jane Smith", "Email": "jane@example.com", "Created": "2024-01-16"}
+]
+st.dataframe(sample_users)
 
 st.subheader("Sample Campaign Data")
-st.write("""
-- Campaign: Summer Sale, Budget: $1000, Status: Active
-- Campaign: Winter Promotion, Budget: $2000, Status: Planning
-""")
+sample_campaigns = [
+    {"ID": 1, "Campaign": "Summer Sale", "Budget": "$1000", "Status": "Active"},
+    {"ID": 2, "Campaign": "Winter Promotion", "Budget": "$2000", "Status": "Planning"}
+]
+st.dataframe(sample_campaigns)
 
-# Add some interactive elements
-if st.button("Click me!"):
+# Interactive elements
+st.subheader("Tools")
+if st.button("🎉 Celebrate!"):
     st.balloons()
-    st.success("You clicked the button! 🎉")
+    st.success("Congratulations! Your app is working!")
 
 # File upload example
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+uploaded_file = st.file_uploader("Upload a CSV file (optional)", type="csv")
 if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
     st.write("File uploaded successfully!")
+    st.dataframe(df.head())
+
+# Database connection example
+st.subheader("Database Setup")
+if st.button("Initialize Database"):
+    st.info("This would initialize your database in a real application")
+    st.write("Tables created: users, ad_campaigns")
+
+# Add some styling
+st.markdown("---")
+st.markdown("### 📊 Analytics Coming Soon")
+st.write("Future features: Campaign performance, ROI analysis, Automated reporting")
