@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from .models import Base   # ✅ back to relative import since app is now a package
+from app.models import Base   # ✅ absolute import now works
 
 DATABASE_URL = "sqlite:///./ads.db"
 
