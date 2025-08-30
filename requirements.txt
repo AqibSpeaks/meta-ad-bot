@@ -1,3 +1,19 @@
+# Web framework + API
+fastapi
+uvicorn[standard]
+
+# Dashboard
 streamlit
+
+# Database + Data processing
 pandas
+sqlalchemy
+
+# HTTP requests
 requests
+
+# Optional: OpenAI for AI-powered summaries
+openai
+
+# Utils
+python-dotenv
