@@ -18,5 +18,3 @@ class AdCampaign(Base):
     campaign_name = Column(String(200))
     budget = Column(Integer)
     status = Column(String(50))
-
-# You can add more models here
